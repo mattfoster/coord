@@ -1,9 +1,9 @@
 coord.rb and coord_test.rb: Geographical coordinate manipulation.
-Copyright (C) 2005 M Foster <mattfoster@clara.co.uk>
+Copyright (C) 2005-2009 M Foster <matt.p.foster@gmail.com>
 
 coord.rb:
-	* Convert to and from a variety of geograhical coordinate systems.
-		lat and long, 3D cartesian, transverse mercator.
+	* Convert to and from a variety of geographical coordinate systems.
+		lat and long, 3D Cartesian, transverse Mercator.
 	* Convert eastings and northings to national grid (UK only)
 	* Convert to and from various geographical coordinate types.
 		degrees mins secs to decimal degrees, degrees mins and decimal mins etc.
