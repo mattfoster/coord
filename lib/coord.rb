@@ -86,34 +86,48 @@ module CoordinateConversion
   end
 end
 
+# Some simple trig function helpers.
+# Automatically define {sin,cos,tan}^{2..8} for use later.
+module TrigHelpers
+  include Math
+  [:sin, :cos, :tan].each do |op|
+    (2..8).each do |x|    
+      define_method((op.to_s + x.to_s)) do |val|
+        method(op).call(val)**x;
+      end
+    end
+  end  
+end
+
 # Transforms sets of coordinates:
 # Currently supports:
 # * lat + long (+ ellipsoid height)
 # * 3D cartesian (x, y, z)
 # * Transverse Mercator (easting, northing)
 class Coordinates
-
+  include TrigHelpers
   
   @@m_eqn = %q{
     m_1 	= b * f_0;
-    m_2	    = (1+n+(5.0/4.0)*n**2 + (5.0/4.0)*n**3) * phi_d;
-    m_2     -= (3*n + 3*n**2+(21.0/8.0)*n**3) * sin(phi_d) * cos(phi_p)
-    m_2     += ((15.0/8.0)*n**2+(15.0/8.0)*n**3) * sin(2*phi_d) * cos(2*phi_p)
-    m_2	    -= ((35.0/24.0)*n**3) * sin(3*phi_d) * cos(3*phi_p);
+    m_2	  = (1+n+(5.0/4.0)*n**2 + (5.0/4.0)*n**3) * phi_d;
+    m_2   -= (3*n + 3*n**2+(21.0/8.0)*n**3) * sin(phi_d) * cos(phi_p)
+    m_2   += ((15.0/8.0)*n**2+(15.0/8.0)*n**3) * sin(2*phi_d) * cos(2*phi_p)
+    m_2	  -= ((35.0/24.0)*n**3) * sin(3*phi_d) * cos(3*phi_p);
     m 		= m_1 * m_2
   }
 
   def initialize(debug = false)
     @debug = debug
     
-    # Generate a load of trig functions: just sugar for the mass of
-    # calculations in ll_to_utm.
-    ['sin', 'cos', 'tan'].each {|op|
-      eval "def #{op}(v); Math.#{op}(v); end"
-      (1..8).each {|x|
-        eval "def #{op}#{x}(v); (Math.#{op}(v))**#{x}; end"
-      }
-    }
+    # # Generate a load of trig functions: just sugar for the mass of
+    # # calculations in ll_to_utm.
+    # ['sin', 'cos', 'tan'].each {|op|
+    #   eval "def #{op}(v); Math.#{op}(v); end"
+    #   (1..8).each {|x|
+    #     eval "def #{op}#{x}(v); (Math.#{op}(v))**#{x}; end"
+    #   }
+    # }
+    #     
   end
 
   # Convert from lat (+phi+ (rads)) and long (+lam+ (rads)) to easting and
