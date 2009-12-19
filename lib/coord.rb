@@ -118,16 +118,6 @@ class Coordinates
 
   def initialize(debug = false)
     @debug = debug
-    
-    # # Generate a load of trig functions: just sugar for the mass of
-    # # calculations in ll_to_utm.
-    # ['sin', 'cos', 'tan'].each {|op|
-    #   eval "def #{op}(v); Math.#{op}(v); end"
-    #   (1..8).each {|x|
-    #     eval "def #{op}#{x}(v); (Math.#{op}(v))**#{x}; end"
-    #   }
-    # }
-    #     
   end
 
   # Convert from lat (+phi+ (rads)) and long (+lam+ (rads)) to easting and
